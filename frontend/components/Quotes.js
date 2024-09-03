@@ -1,7 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setHighlightedQuote, toggleVisibility } from "../state/quotesSlice";
-import { useGetQuotesQuery, useDeleteQuoteMutation } from "../state/quotesApi";
+import {
+  useGetQuotesQuery,
+  useDeleteQuoteMutation,
+  useToggleFakeMutation,
+} from "../state/quotesApi";
 
 export default function Quotes() {
   //rtk query
@@ -10,8 +14,9 @@ export default function Quotes() {
     isLoading: quotesLoading,
     isFetching: quotesRefreshing,
   } = useGetQuotesQuery();
-  const [deleteQuote, { error: deleteError, isLoading }] =
-    useDeleteQuoteMutation();
+  const [deleteQuote, { error: deleteError }] = useDeleteQuoteMutation();
+  const [toggleFake, { error: toggleError, isLoading }] =
+    useToggleFakeMutation();
   const displayAllQuotes = useSelector((st) => st.quotesState.displayAllQuotes);
   const highlightedQuote = useSelector((st) => st.quotesState.highlightedQuote);
   const dispatch = useDispatch();
@@ -30,6 +35,7 @@ export default function Quotes() {
                 highlightedQuote === qt.id ? " highlight" : ""
               }`}
             >
+              {deleteError && <div>{deleteError.data.message}</div>}
               <div>{qt.quoteText}</div>
               <div>{qt.authorName}</div>
               <div className="quote-buttons">
@@ -43,7 +49,15 @@ export default function Quotes() {
                 <button onClick={() => dispatch(setHighlightedQuote(qt.id))}>
                   HIGHLIGHT
                 </button>
-                <button>FAKE</button>
+                <button
+                  onClick={() => {
+                    const id = qt.id;
+                    const isFake = !qt.apocryphal;
+                    toggleFake({ id, isFake });
+                  }}
+                >
+                  FAKE
+                </button>
               </div>
             </div>
           ))}

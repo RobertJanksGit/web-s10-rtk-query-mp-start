@@ -18,10 +18,10 @@ export const quoteApi = createApi({
       invalidatesTags: ["Quotes"],
     }),
     toggleFake: build.mutation({
-      query: ({ id, quote }) => ({
+      query: ({ id, isFake }) => ({
         url: `quotes/${id}`,
         method: "PUT",
-        body: quote,
+        body: { apocryphal: isFake },
       }),
       invalidatesTags: ["Quotes"],
     }),
