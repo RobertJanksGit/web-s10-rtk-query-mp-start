@@ -15,14 +15,16 @@ export default function Quotes() {
     isFetching: quotesRefreshing,
   } = useGetQuotesQuery();
   const [deleteQuote, { error: deleteError }] = useDeleteQuoteMutation();
-  const [toggleFake, { error: toggleError, isLoading }] =
+  const [toggleFake, { error: toggleError, isLoading: toggleLoading }] =
     useToggleFakeMutation();
   const displayAllQuotes = useSelector((st) => st.quotesState.displayAllQuotes);
   const highlightedQuote = useSelector((st) => st.quotesState.highlightedQuote);
   const dispatch = useDispatch();
   return (
     <div id="quotes">
-      <h3>Quotes</h3>
+      <h3>
+        Quotes {toggleLoading || (quotesRefreshing && "being updated...")}
+      </h3>
       <div>
         {quotes
           ?.filter((qt) => {
