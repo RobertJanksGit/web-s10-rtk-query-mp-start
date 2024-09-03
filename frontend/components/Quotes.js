@@ -33,7 +33,13 @@ export default function Quotes() {
               <div>{qt.quoteText}</div>
               <div>{qt.authorName}</div>
               <div className="quote-buttons">
-                <button>DELETE</button>
+                <button
+                  onClick={() => {
+                    deleteQuote(qt.id);
+                  }}
+                >
+                  DELETE
+                </button>
                 <button onClick={() => dispatch(setHighlightedQuote(qt.id))}>
                   HIGHLIGHT
                 </button>
